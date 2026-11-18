@@ -1,0 +1,58 @@
+Plumbline
+=========
+
+This repository offers tested patches against published FLOP npm packages
+for two open client/SDK issues filed by @almondous:
+
+  https://github.com/flop-labs/network/issues/321
+  https://github.com/flop-labs/network/issues/44
+
+The TypeScript sources for those packages live in the private repository
+flop-labs/flop-core (sdk/client and sdk/typescript). They are not publicly
+readable, so this is a standalone package plus patches against the npm
+releases, not a fork of flop-core.
+
+Credits
+-------
+
+@almondous diagnosed both defects against the published artifacts, wrote
+the minimal patches, and published complete offline harnesses on the
+issues above. The patch files and harnesses in this repository are those
+proposals, arranged so they can be re-run against pinned npm tarballs.
+
+FLOP package licenses
+---------------------
+
+@flop-labs/client@0.2.2, @flop-labs/contracts@0.1.2, and
+@flop-labs/sdk@0.4.0 / @flop-labs/sdk@0.6.0 are licensed under
+MIT OR Apache-2.0, Copyright (c) 2025-2026 The FLOP Network Contributors.
+Official packages, including license text, are obtained from npm:
+
+  https://registry.npmjs.org/@flop-labs/client/-/client-0.2.2.tgz
+  https://registry.npmjs.org/@flop-labs/contracts/-/contracts-0.1.2.tgz
+  https://registry.npmjs.org/@flop-labs/sdk/-/sdk-0.4.0.tgz
+  https://registry.npmjs.org/@flop-labs/sdk/-/sdk-0.6.0.tgz
+
+Pinned verification used here:
+
+  @flop-labs/client@0.2.2
+    npm integrity  sha512-2sN0d2Z6hMTwedD+/EmoiuL1ks6gd2pLLhwrVfG0fFWhIT2j04L53EOlkjNGDcogsPvLsN5qTwUEgqmVyaefWQ==
+    dist/index.js SHA-256  e9e6f38b2fc55f85f1fbaeadea00bffe706dfb37171e542c5b446de3b3f48c54
+    patched dist/index.js SHA-256  0efe3b8ab6f154425ea0f8635628f259bb882b99dfd8faee59d38a2cd6f20df6
+      (hash published by @almondous on #321)
+
+  @flop-labs/contracts@0.1.2
+    npm integrity  sha512-6IwLrrapz2jbuFK6slYAK8lLcyEMawEzaRftoTFhdZdABasg580wCdHug2QLABa1D7xyQkq59qhmnUwML7bnNA==
+
+  @flop-labs/sdk@0.4.0
+    npm integrity  sha512-qC31W4f08qXKpONZDXx2fn9rnaiouBbKrcf5zyzIaFiXk+sD/PT14iko3OJ9LtD398hUBG4tZ/2/Wd9/rss/5A==
+    dist/react/hooks.js SHA-256  7189bb6f6df5ee085def9fbf5e4a6cb31cff62a12c1d497008f2ad9ed2c8a809
+
+  @flop-labs/sdk@0.6.0
+    npm integrity  sha512-TGzoXtBhyXDsP1ZyPp5a3zzVlB2F7GXSirxxZ4iuDEzlpz22WayxSpq1XRqq/ngLhK0+vvUHP3ygDLpyFAP9zw==
+    dist/react/hooks.js SHA-256  7189bb6f6df5ee085def9fbf5e4a6cb31cff62a12c1d497008f2ad9ed2c8a809
+      (byte-identical to the 0.4.0 hooks.js file; the #44 defect is still present)
+
+The patch files are derivatives of that published work and remain under
+the same MIT OR Apache-2.0 terms. Original TypeScript in src/ is MIT,
+Copyright (c) 2026 xbtMelchizedek.

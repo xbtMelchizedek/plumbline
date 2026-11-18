@@ -1,0 +1,29 @@
+{
+  "name": "plumbline",
+  "version": "0.1.0",
+  "description": "Tested patches for FLOP client receipt ID correlation (#321) and SDK useBalance stale queries (#44). Credit @almondous.",
+  "type": "module",
+  "license": "MIT",
+  "engines": {
+    "node": ">=22"
+  },
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "lint": "tsc --noEmit",
+    "test": "tsx --test tests/*.test.ts",
+    "scan": "python3 scripts/secret_scan.py",
+    "patch:check": "node scripts/apply-and-test.mjs",
+    "check": "npm run lint && npm test && npm run scan && npm run patch:check"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "@types/react": "^18.3.12",
+    "@types/react-test-renderer": "^18.3.0",
+    "react": "18.3.1",
+    "react-test-renderer": "18.3.1",
+    "tsx": "^4.23.15",
+    "typescript": "^5.9.3"
+  }
+}
