@@ -1,0 +1,63 @@
+--- a/dist/react/hooks.js
++++ b/dist/react/hooks.js
+@@ -1,4 +1,4 @@
+-import { useState, useEffect, useCallback, useRef } from "react";
++import { useState, useEffect, useCallback, useRef, useMemo } from "react";
+ import { useFlopClient } from "./context.js";
+ /**
+  * Hook to query and auto-refresh account balance.
+@@ -11,26 +11,46 @@
+     const [info, setInfo] = useState(null);
+     const [loading, setLoading] = useState(true);
+     const [error, setError] = useState(null);
++    const requestId = useRef(0);
++    const queryGeneration = useRef(0);
++    const appliedRequestId = useRef(0);
++    const query = useMemo(() => ({ client, address }), [client, address]);
++    const activeQuery = useRef(null);
+     const fetch = useCallback(async () => {
++        if (activeQuery.current !== query) return;
++        const id = ++requestId.current;
++        const generation = queryGeneration.current;
++        const isCurrent = () => generation === queryGeneration.current && id >= appliedRequestId.current;
+         try {
+             const result = await client.getAccountInfo(address);
++            if (!isCurrent()) return;
++            appliedRequestId.current = id;
+             setInfo(result);
+             setError(null);
+         }
+         catch (e) {
+-            setError(e);
++            if (isCurrent()) {
++                appliedRequestId.current = id;
++                setError(e);
++            }
+         }
+         finally {
+-            setLoading(false);
++            if (isCurrent()) setLoading(false);
+         }
+-    }, [client, address]);
++    }, [client, address, query]);
+     useEffect(() => {
++        activeQuery.current = query;
++        setInfo(null);
++        setError(null);
++        setLoading(true);
+         fetch();
+-        if (refreshMs <= 0)
+-            return;
+-        const id = setInterval(fetch, refreshMs);
+-        return () => clearInterval(id);
+-    }, [fetch, refreshMs]);
++        const id = refreshMs > 0 ? setInterval(fetch, refreshMs) : undefined;
++        return () => {
++            activeQuery.current = null;
++            ++queryGeneration.current;
++            if (id !== undefined) clearInterval(id);
++        };
++    }, [fetch, refreshMs, query]);
+     return { info, loading, error, refetch: fetch };
+ }
+ /**

@@ -1,0 +1,14 @@
+--- a/dist/index.js
++++ b/dist/index.js
+@@ -116,7 +116,10 @@
+         validate(requestId, assertCredentialReceiptRequestId, "Invalid request ID");
+         if (!this.apiKey)
+             throw new FlopValidationError("apiKey is required for receipt lookup");
+-        return validate(await this.request(`keys/me/receipts/${encodeURIComponent(requestId)}`, undefined, options, true), assertCredentialReceipt, "Invalid credential receipt response");
++        const receipt = validate(await this.request(`keys/me/receipts/${encodeURIComponent(requestId)}`, undefined, options, true), assertCredentialReceipt, "Invalid credential receipt response");
++        if (receipt.request_id !== requestId)
++            throw new FlopValidationError("Receipt request ID does not match requested ID");
++        return receipt;
+     }
+     async createChatCompletion(input, options = {}) {
+         nonstream(input);
